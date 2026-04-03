@@ -124,6 +124,88 @@ Summarizes results across seizure phases and brain regions:
 
 **Output:** `OutcomeVars-epilepsiae.mat` with averaged A, B, G, and brain state values
 
+### Step 5: Statistical Analysis & Visualization (`c3_analyse_results.m`)
+ 
+Performs comprehensive statistical analysis and generates publication-ready figures:
+ 
+**Analysis 1: Grand Average Across Seizures**
+- Aggregates ABG parameters per patient across all their seizures
+- Compares parameter changes from interictal to ictal states
+- Statistical testing: Wilcoxon signed-rank tests with FDR correction
+- Generates error bar plots showing parameter distributions across epileptic states
+ 
+**Analysis 2: Seizure Onset Pattern Analysis**
+- Groups seizures by clinical onset pattern (7 types):
+  - `a`: Rhythmic alpha waves
+  - `b`: Rhythmic beta waves
+  - `l`: Low amplitude fast activity
+  - `p`: Polyspikes
+  - `r`: Repetitive spiking
+  - `s`: Rhythmic sharp waves
+  - `t`: Rhythmic theta waves
+- Calculates mean ± SE for each parameter per pattern
+- Visualizes temporal evolution of ABG across seizure phases
+  --> statistical anaylsis: seizure onset pattern classification in python notebook `sz_types_classification.ipynb` (Step 6)
+ 
+**Analysis 3: Post-hoc Comparison ("l" vs "r" types)**
+- Detailed comparison of two major seizure types
+- Tests differences in:
+  - Onset parameter values (A, B, G)
+  - SOZ vs non-SOZ localization effects
+  - Parameter evolution across time windows
+- Statistical tests: Wilcoxon rank-sum and signed-rank with FDR correction
+ 
+**Analysis 4: Clinical Correlates**
+- Examines relationships between ABG parameters and:
+  - Seizure lateralization (left vs right hemisphere)
+  - Hippocampal sclerosis (HS vs no HS)
+  - Surgery outcome (Engel Ia vs II classification)
+- Analyzes parameter changes (interictal → ictal) as predictors
+ 
+**Visualizations generated:**
+- Time series plots with error bars
+- Boxplots with statistical annotations
+- Comparative bar charts for SOZ vs non-SOZ
+- Clinical correlation scatter plots
+ 
+### Step 6: Machine Learning Classification (`sz_types_classification.ipynb`)
+ 
+Python notebook implementing supervised classification of seizure onset patterns using fitted ABG parameters:
+ 
+**Classification Framework:**
+- Uses Support Vector Machines (SVM) with linear kernel
+- Leave-one-seizure-out cross-validation for robust performance estimation
+- Balanced class weighting to handle imbalanced seizure type distributions
+- Standard scaling of features per fold
+ 
+**Feature Configurations:**
+Four feature sets tested:
+1. **ABG combined**: All three parameters (A, B, G)
+2. **A only**: Excitation parameter
+3. **B only**: Slow inhibition parameter
+4. **G only**: Fast inhibition parameter
+ 
+**Time Window Analysis:**
+Classification performed for each epileptic state:
+- Interictal: 60-30s before seizure onset
+- Pre-onset: 30-0s before onset
+- Onset: 0-10s after onset
+- Ictal: 10-25s after onset
+ 
+**Evaluation Metrics:**
+- Balanced accuracy (accounts for class imbalance)
+- Confusion matrices per parameter set
+- Statistical significance testing:
+  - Permutation tests (1000 iterations)
+  - FDR correction for multiple comparisons
+  - P-value heatmaps
+ 
+**Output:**
+- Classification accuracy tables per time window
+- Statistical significance heatmaps (uncorrected & FDR-corrected)
+- Performance comparison across feature combinations
+
+
 ## Requirements
 
 ### MATLAB Dependencies
@@ -134,6 +216,13 @@ Summarizes results across seizure phases and brain regions:
 ### Python Dependencies (for notebook)
 ```bash
 pip install numpy pandas matplotlib scikit-learn jupyter
+```
+```python
+scikit-learn      # SVM classifier
+scipy             # I/O for MATLAB files
+pandas            # Data manipulation
+seaborn           # Heatmap visualization
+statsmodels       # FDR correction
 ```
 
 ### External Functions
@@ -163,9 +252,7 @@ PATH_code = [PATH, '\functions'];
 PATH_data = [PATH, '\data'];
 ```
 
-3. Add helper functions to `functions/` directory
-
-4. Prepare data in expected format (see Data Format section: Input)
+3. Prepare data in expected format (see Data Format section: Input)
 
 ## Data Format
 
@@ -178,7 +265,7 @@ info.SOZ    % [1 × channels] logical, seizure onset zone markers
 info.seiz_start_index  % Seizure onset sample
 ```
 
-### Output: Feature Structure
+### Output: Feature Structure (11 signal features)
 ```matlab
 FEATURES(file_ind, channel_ind)
     .fileID           % Identifier string
@@ -186,7 +273,7 @@ FEATURES(file_ind, channel_ind)
     .featuresF0_raw   % [segments × 11] raw features
 ```
 
-### Output: Result Structure
+### Output: Result Structure (fitted brain state and ABG)
 ```matlab
 RESULT(file_ind, channel_ind)
     .minerrtype       % [segments × 1] brain state (1-4)
@@ -211,7 +298,11 @@ c2_get_model_result       % Creates RESULT-epilepsiae.mat
 c2_prepare_outcome_vars   % Creates OutcomeVars-epilepsiae.mat
 
 %% 5. Analyze results
-c3_analyze_results        % Plots main figures of the manuscripts and 
+c3_analyze_results        % Plots main figures of the manuscript
+
+%% 6. Machine learning classification (Python)
+% Run in Jupyter notebook or Python environment:
+% jupyter notebook sz_types_classification.ipynb % Plots main figures of the manuscript and supplement
 
 ```
 
@@ -241,8 +332,8 @@ Adjust the number of workers based on your system resources.
 If you use this code, please cite:
 
 ```
-Dallmer-Zerbe, I., et al. (2023). Model-based brain state estimation for epilepsy.
-[Publication details]
+Dallmer-Zerbe, I., et al. (2023). Distinct Synaptic Excitation–Inhibition Mechanisms Underlie Clinically Defined Seizure Onset Patterns.
+[Publication details will be added after publication]
 ```
 
 ## References
