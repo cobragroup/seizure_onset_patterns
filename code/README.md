@@ -226,7 +226,7 @@ statsmodels       # FDR correction
 ```
 
 ### External Functions
-The pipeline requires custom helper functions in the `functions/` directory:
+The main scripts require custom helper functions in the `functions/` directory:
 - `Wendl2005stimnoise.m`: Wendling model simulation
 - `calc_feat.m`: Feature extraction
 - `generate_prototypes.m`: Cluster prototype generation
@@ -236,13 +236,9 @@ The pipeline requires custom helper functions in the `functions/` directory:
 - `type_labeling.m`: Helper function for brain state classification
 - `preprocess_features.m`: Helper function for cluster prototype generation
 
-## Installation & Setup
+## Run Code:
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/epilepsy-analysis.git
-cd epilepsy-analysis
-```
+1. Download/ clone the repository
 
 2. Set up paths in each script:
 ```matlab
@@ -340,7 +336,9 @@ Dallmer-Zerbe, I., et al. (2023). Distinct Synaptic Excitation–Inhibition Mech
 
 - Wendling, F., et al. (2005). Epileptic fast activity can be explained by a model of impaired GABAergic dendritic inhibition. *European Journal of Neuroscience*.
 - Fietkiewicz, C., & Loparo, K. A. (2016). Stochastic neural field model of stimulus-dependent variability in cortical neurons.
-
+- Ihle, M., Feldwisch-Drentrup, H., Teixeira, C. A., Witon, A., Schelter, B., Timmer, J., Schulze Bonhage, A.; 2012; EPILEPSIAE database: An extensive electroencephalography database of epilepsy patients; European Epilepsy Database (https://www.epilepsy-database.eu/).
+  
+  
 ## Acknowledgments
 
 This work uses data from the EPILEPSIAE database. Due to data restrictions, no data or output structures are provided. 
