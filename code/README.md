@@ -17,7 +17,7 @@ dallmer-zerbe@cs.cas.cz
 
 This code implements a model-based approach to characterize different seizure onset patterns that:
 1. Simulates EEG signals using the Wendling (2005) neural mass model across parameter sweeps
-2. Extracts signal features from both simulated and real intracranial EEG data (seizure recordings from EPILEPSOAE database)
+2. Extracts signal features from both simulated and real intracranial EEG data (seizure recordings from EPILEPSAE database)
 3. Classifies epileptic brain states (interictal, pre-onset, onset, ictal)
 4. Estimates optimal model parameters by matching real EEG features to simulated ones
 5. Compares identified model parameters across time (interictal to ictal) for different seizure onset patterns.
